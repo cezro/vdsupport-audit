@@ -1,0 +1,138 @@
+﻿[
+    {
+        "path":  "/home",
+        "home_lending_copy":  true,
+        "demo_mode_result_page":  false,
+        "template_literal":  false,
+        "broken_spacing":  false,
+        "zero_stats":  true
+    },
+    {
+        "path":  "/fase-service-page",
+        "home_lending_copy":  false,
+        "demo_mode_result_page":  false,
+        "template_literal":  false,
+        "broken_spacing":  false,
+        "zero_stats":  false
+    },
+    {
+        "path":  "/full-arch-growth-system",
+        "home_lending_copy":  false,
+        "demo_mode_result_page":  false,
+        "template_literal":  false,
+        "broken_spacing":  false,
+        "zero_stats":  false
+    },
+    {
+        "path":  "/service-page",
+        "home_lending_copy":  false,
+        "demo_mode_result_page":  false,
+        "template_literal":  false,
+        "broken_spacing":  false,
+        "zero_stats":  false
+    },
+    {
+        "path":  "/service-page-555902",
+        "home_lending_copy":  false,
+        "demo_mode_result_page":  false,
+        "template_literal":  false,
+        "broken_spacing":  false,
+        "zero_stats":  false
+    },
+    {
+        "path":  "/ncla-quiz-funnel",
+        "home_lending_copy":  false,
+        "demo_mode_result_page":  false,
+        "template_literal":  true,
+        "broken_spacing":  false,
+        "zero_stats":  false
+    },
+    {
+        "path":  "/ncla-squeeze-page-1",
+        "home_lending_copy":  false,
+        "demo_mode_result_page":  false,
+        "template_literal":  true,
+        "broken_spacing":  false,
+        "zero_stats":  false
+    },
+    {
+        "path":  "/ncla-result-page",
+        "home_lending_copy":  false,
+        "demo_mode_result_page":  true,
+        "template_literal":  true,
+        "broken_spacing":  false,
+        "zero_stats":  false
+    },
+    {
+        "path":  "/course-641943",
+        "home_lending_copy":  false,
+        "demo_mode_result_page":  false,
+        "template_literal":  false,
+        "broken_spacing":  false,
+        "zero_stats":  false
+    },
+    {
+        "path":  "/nextlevel-124405",
+        "home_lending_copy":  false,
+        "demo_mode_result_page":  false,
+        "template_literal":  false,
+        "broken_spacing":  false,
+        "zero_stats":  true
+    },
+    {
+        "path":  "/discovery-call",
+        "home_lending_copy":  false,
+        "demo_mode_result_page":  false,
+        "template_literal":  false,
+        "broken_spacing":  false,
+        "zero_stats":  false
+    },
+    {
+        "path":  "/booking",
+        "home_lending_copy":  false,
+        "demo_mode_result_page":  false,
+        "template_literal":  false,
+        "broken_spacing":  false,
+        "zero_stats":  false
+    },
+    {
+        "path":  "/thank-you",
+        "home_lending_copy":  false,
+        "demo_mode_result_page":  false,
+        "template_literal":  false,
+        "broken_spacing":  false,
+        "zero_stats":  false
+    },
+    {
+        "path":  "/result-page-4799-page",
+        "home_lending_copy":  false,
+        "demo_mode_result_page":  false,
+        "template_literal":  false,
+        "broken_spacing":  false,
+        "zero_stats":  false
+    },
+    {
+        "path":  "/privacy-policy",
+        "home_lending_copy":  false,
+        "demo_mode_result_page":  false,
+        "template_literal":  false,
+        "broken_spacing":  false,
+        "zero_stats":  false
+    },
+    {
+        "path":  "/privacy-policy-page",
+        "home_lending_copy":  false,
+        "demo_mode_result_page":  false,
+        "template_literal":  false,
+        "broken_spacing":  false,
+        "zero_stats":  false
+    },
+    {
+        "path":  "/terms-of-use",
+        "home_lending_copy":  false,
+        "demo_mode_result_page":  false,
+        "template_literal":  false,
+        "broken_spacing":  false,
+        "zero_stats":  false
+    }
+]
