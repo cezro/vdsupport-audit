@@ -72,25 +72,41 @@ Root `https://fullarchsalesexperts.com/` redirects to `/home`.
 
 ### Funnel map (user journey)
 
-```
-                    ┌─────────────────────────────────────┐
-                    │  /home  (primary homepage)          │
-                    │  /page-draft  ⚠ PUBLIC DRAFT        │
-                    │  /fase-service-page  (best hub)     │
-                    └──────────────┬──────────────────────┘
-                                   │
-          ┌────────────────────────┼────────────────────────┐
-          ▼                        ▼                        ▼
-   /ncla-quiz-funnel         /course-641943          /discovery-call
-   /ncla-squeeze-page-1     ($4K Masterclass)       /booking (dup)
-          │                        │                        │
-          ▼                        ▼                        ▼
-   /ncla-result-page ⚠       /thank-you              Calendar booked
-   BROKEN PERSONALIZATION    (post-purchase)         → GHL workflow
-          │
-          ▼
-   /nextlevel-124405
-   (NLCA $295/mo or $2,950/yr)
+```mermaid
+flowchart TB
+  subgraph entry [Entry points]
+    home["/home — primary homepage"]
+    pageDraft["/page-draft — PUBLIC DRAFT"]
+    faseHub["/fase-service-page — best hub"]
+  end
+
+  subgraph offers [Offer paths]
+    quiz["/ncla-quiz-funnel<br/>/ncla-squeeze-page-1"]
+    masterclass["/course-641943<br/>$4K Masterclass"]
+    discovery["/discovery-call<br/>/booking dup"]
+  end
+
+  subgraph outcomes [Outcomes]
+    resultPage["/ncla-result-page<br/>BROKEN PERSONALIZATION"]
+    thankYou["/thank-you<br/>post-purchase"]
+    calendarBooked["Calendar booked<br/>→ GHL workflow"]
+    nextlevel["/nextlevel-124405<br/>NLCA $295/mo or $2,950/yr"]
+  end
+
+  home --> quiz
+  home --> masterclass
+  home --> discovery
+  pageDraft --> quiz
+  pageDraft --> masterclass
+  pageDraft --> discovery
+  faseHub --> quiz
+  faseHub --> masterclass
+  faseHub --> discovery
+
+  quiz --> resultPage
+  masterclass --> thankYou
+  discovery --> calendarBooked
+  resultPage --> nextlevel
 ```
 
 ---
