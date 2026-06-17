@@ -18,7 +18,6 @@ What is costing them leads and credibility right now is **broken digital infrast
 | Severity | Issue | Business impact |
 |----------|-------|-----------------|
 | **P0** | NLCA Revenue Audit result page shows **demo mode** and unreplaced `${gapHeadline}` template | Lead magnet delivers a broken report → kills NLCA conversions |
-| **P0** | Homepage stat counters display **0%** instead of 70%+ / 40–50 arches | Destroys trust on primary sales page |
 | **P0** | `/page-draft` is **publicly live** | Unfinished draft indexed and shareable |
 | **P1** | Homepage contains **"home lending products"** copy (wrong industry) | Immediate credibility hit on $4K offer |
 | **P1** | Duplicate live pages (2× service, 2× privacy, 2× audit squeeze, 2× booking) | SEO dilution, analytics split, maintenance chaos |
@@ -121,13 +120,17 @@ flowchart TB
 - Good meta description for SEO
 
 **Critical issues**
-1. **Animated stat counters stuck at zero** — displays "0% conversion rate", "0+ arches per month", "Only 0% marketing spend". The counter JavaScript is not firing. Visitors see the opposite of the 70%+ proof story.
-2. **Wrong industry copy** in Masterclass section: *"Explore our diverse range of home lending products and services tailored to fit your unique needs and goals."* — clearly pasted from another template. Fatal on a dental sales page.
-3. **Page weight: 1.09 MB HTML** — will hurt mobile PageSpeed and ad landing quality scores.
+1. **Wrong industry copy** in Masterclass section: *"Explore our diverse range of home lending products and services tailored to fit your unique needs and goals."* — clearly pasted from another template. Fatal on a dental sales page.
+2. **Page weight: 1.09 MB HTML** — will hurt mobile PageSpeed and ad landing quality scores.
+
+**Retracted (false positive on re-check)**
+- ~~Animated stat counters stuck at zero~~ — counters **start at 0% on page load** and animate to **70% conversion / 50+ arches / 5% marketing spend** once the proof section (`#section-lq1-mNj5zP`) scrolls into view. Initial audit checked load state without scrolling; live Playwright re-test confirmed animation after viewport entry.
+
+**Minor UX note (P2, not broken)**
+- Proof counters are below the fold and show 0% until scroll. Users who never reach that section only see zeros in the DOM — consider static fallback numbers or triggering animation earlier.
 
 **Fix now**
 - Replace lending copy with dental-appropriate CTA copy
-- Fix counter element bindings or replace with static proof numbers
 - Compress/remove unused builder sections
 
 ---
@@ -376,9 +379,8 @@ fase-site-archive/
 ### Today (P0 — revenue blockers)
 
 1. **Fix `/ncla-result-page`** — map quiz fields, kill demo mode, test full funnel
-2. **Fix homepage stat counters** — 0% is actively harming conversions
-3. **Remove wrong "home lending" copy** on `/home`
-4. **Unpublish `/page-draft`** or redirect to `/home`
+2. **Remove wrong "home lending" copy** on `/home`
+3. **Unpublish `/page-draft`** or redirect to `/home`
 
 ### This week (P1 — trust + SEO)
 
@@ -403,7 +405,7 @@ fase-site-archive/
 
 ### The story to tell Stacy
 
-> "Your content and coaching are working — 216 new leads and a packed training calendar prove it. But your NLCA audit funnel, which should be your best NLCA enrollment engine, is delivering a broken report. Your homepage is showing 0% conversion rates. And you have a draft page live that anyone can find on Google.
+> "Your content and coaching are working — 216 new leads and a packed training calendar prove it. But your NLCA audit funnel, which should be your best NLCA enrollment engine, is delivering a broken report. And you have a draft page live that anyone can find on Google.
 >
 > You're scaling client trainings across dozens of practices, but the marketing site isn't getting the same operational discipline. That's not a content problem — it's a **digital ops gap**.
 >

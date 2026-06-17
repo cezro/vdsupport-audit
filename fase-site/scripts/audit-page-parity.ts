@@ -60,7 +60,8 @@ type RuntimeSnapshot = {
     logoTrackWiderThanSlider: boolean;
     videoCount: number;
     videoPlayerReady: boolean;
-    zeroStatCounters: boolean;
+    statCountersZeroAtLoad: boolean;
+    statCountersAnimatedAfterScroll: boolean;
     homeLendingCopy: boolean;
   };
   heroH1FontFamily: string;
@@ -381,7 +382,8 @@ async function captureRuntimeSnapshot(
             !!slider && !!track && track.scrollWidth > slider.clientWidth,
           videoCount: videos.length,
           videoPlayerReady,
-          zeroStatCounters: /0%\s*conversion|Only 0%|0\+ arches/i.test(text),
+          statCountersZeroAtLoad: /0%\s*conversion|Only 0%|0\+ arches/i.test(text),
+          statCountersAnimatedAfterScroll: false,
           homeLendingCopy: /home lending products/i.test(text),
         },
         heroH1FontFamily: heroStyle?.fontFamily ?? "",
@@ -389,6 +391,44 @@ async function captureRuntimeSnapshot(
     },
     { sourceLabel: source, scopeSel: scope, viewportLabel: viewport },
   );
+}
+
+async function measureStatCountersAfterScroll(
+  page: Page,
+  scopeSelector: string,
+): Promise<boolean> {
+  await page.evaluate(() => {
+    const section =
+      document.querySelector("#section-lq1-mNj5zP") ??
+      document.querySelector(".section-lq1-mNj5zP");
+    section?.scrollIntoView({ behavior: "instant", block: "center" });
+  });
+  await page.waitForTimeout(8000);
+
+  return page.evaluate((scopeSel) => {
+    const section =
+      document.querySelector("#section-lq1-mNj5zP") ??
+      document.querySelector(".section-lq1-mNj5zP") ??
+      document.querySelector(scopeSel) ??
+      document.body;
+    const text = (section.textContent ?? "").replace(/\s+/g, " ").trim();
+    return /70%\s*conversion|50\+\s*arches|only\s+5%\s*marketing/i.test(text);
+  }, scopeSelector);
+}
+
+async function testStatCounters(page: Page): Promise<string> {
+  const beforeZero = await page.evaluate(() => {
+    const section =
+      document.querySelector("#section-lq1-mNj5zP") ??
+      document.querySelector(".section-lq1-mNj5zP");
+    const text = (section?.textContent ?? "").replace(/\s+/g, " ").trim();
+    return /0%\s*conversion|0\+\s*arches|only\s+0%\s*marketing/i.test(text);
+  });
+
+  const animated = await measureStatCountersAfterScroll(page, "body");
+  if (animated) return "animated";
+  if (beforeZero) return "stuck_at_zero";
+  return "unknown";
 }
 
 async function testAboutScroll(page: Page, isLocal: boolean): Promise<string> {
@@ -520,6 +560,10 @@ async function runInteractiveTests(
         : "hidden";
     });
     push("Hero heading visible", liveHeading, localHeading);
+
+    const liveStats = await testStatCounters(livePage);
+    const localStats = await testStatCounters(localPage);
+    push("Stat counters animate after scroll", liveStats, localStats);
 
     const liveAbout = await testAboutScroll(livePage, false);
     const localAbout = await testAboutScroll(localPage, true);
@@ -961,6 +1005,13 @@ async function main() {
         viewportLabel,
       );
 
+      if (slug === "home") {
+        liveSnap.widgets.statCountersAnimatedAfterScroll =
+          await measureStatCountersAfterScroll(livePage, "body");
+        localSnap.widgets.statCountersAnimatedAfterScroll =
+          await measureStatCountersAfterScroll(localPage, "#ghl-root");
+      }
+
       await livePage.close();
       await localPage.close();
       return { live: liveSnap, local: localSnap };
@@ -1058,15 +1109,37 @@ async function main() {
       });
     }
 
-    if (desktopLive.widgets.zeroStatCounters && desktopLocal.widgets.zeroStatCounters) {
+    if (
+      slug === "home" &&
+      desktopLive.widgets.statCountersAnimatedAfterScroll &&
+      !desktopLocal.widgets.statCountersAnimatedAfterScroll
+    ) {
       addFinding(findings, {
-        severity: "P3",
-        category: "content",
+        severity: "P1",
+        category: "runtime",
         element: "stat counters",
-        live: "shows 0%",
-        local: "shows 0%",
+        live: "animate after scroll into view",
+        local: "stuck at 0% after scroll",
+        rootCause: "runtime_failure",
+        evidence:
+          "Live counters animate to 70%+/50+/5% after #section-lq1-mNj5zP enters viewport; local does not.",
+      });
+    }
+
+    if (
+      slug === "home" &&
+      !desktopLive.widgets.statCountersAnimatedAfterScroll &&
+      !desktopLocal.widgets.statCountersAnimatedAfterScroll
+    ) {
+      addFinding(findings, {
+        severity: "P2",
+        category: "runtime",
+        element: "stat counters",
+        live: "stuck at 0% even after scroll",
+        local: "stuck at 0% even after scroll",
         rootCause: "live_baseline_bug",
-        evidence: "Counter widgets show zero on both live and local.",
+        evidence:
+          "Counters did not animate after scrolling proof section into view on either environment.",
       });
     }
 
