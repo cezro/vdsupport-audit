@@ -1,7 +1,7 @@
 # Full Arch Sales Experts (FASE)
 ## Digital Infrastructure & Funnel Audit
 **Prepared for:** Stacy Farley / Full Arch Sales Experts  
-**Prepared by:** Louie Cervera 
+**Prepared by:** Louie Cervera
 **Date:** June 16, 2026  
 **Domain:** https://fullarchsalesexperts.com  
 **Platform:** GoHighLevel (GHL)  
