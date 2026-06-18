@@ -73,40 +73,29 @@ Root `https://fullarchsalesexperts.com/` redirects to `/home`.
 
 ```mermaid
 flowchart TB
-  subgraph entry [Entry points]
-    home["/home — primary homepage"]
-    pageDraft["/page-draft — PUBLIC DRAFT"]
-    faseHub["/fase-service-page — best hub"]
-  end
+  home["/home"]
+  draft["/page-draft ⚠"]
+  hub["/fase-service-page"]
 
-  subgraph offers [Offer paths]
-    quiz["/ncla-quiz-funnel<br/>/ncla-squeeze-page-1"]
-    masterclass["/course-641943<br/>$4K Masterclass"]
-    discovery["/discovery-call<br/>/booking dup"]
-  end
+  quiz["Quiz funnel"]
+  mc["Masterclass $4K"]
+  dc["Discovery call"]
 
-  subgraph outcomes [Outcomes]
-    resultPage["/ncla-result-page<br/>BROKEN PERSONALIZATION"]
-    thankYou["/thank-you<br/>post-purchase"]
-    calendarBooked["Calendar booked<br/>→ GHL workflow"]
-    nextlevel["/nextlevel-124405<br/>NLCA $295/mo or $2,950/yr"]
-  end
+  res["Result page ⚠"]
+  ty["Thank-you"]
+  cal["Calendar booked"]
+  nlc["NLCA upsell"]
 
-  home --> quiz
-  home --> masterclass
-  home --> discovery
-  pageDraft --> quiz
-  pageDraft --> masterclass
-  pageDraft --> discovery
-  faseHub --> quiz
-  faseHub --> masterclass
-  faseHub --> discovery
+  home --> quiz & mc & dc
+  draft -.-> home
+  hub -.-> home
 
-  quiz --> resultPage
-  masterclass --> thankYou
-  discovery --> calendarBooked
-  resultPage --> nextlevel
+  quiz --> res --> nlc
+  mc --> ty
+  dc --> cal
 ```
+
+Primary paths from `/home`. Dashed lines: alternate entries (`/page-draft`, `/fase-service-page`). URL dupes: `/ncla-squeeze-page-1`, `/booking`.
 
 ---
 
