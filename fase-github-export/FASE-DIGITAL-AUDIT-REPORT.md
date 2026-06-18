@@ -23,7 +23,8 @@ What is costing them leads and credibility right now is **broken digital infrast
 | **P1** | Duplicate live pages (2× service, 2× privacy, 2× audit squeeze, 2× booking) | SEO dilution, analytics split, maintenance chaos |
 | **P1** | `sitemap.xml` returns **500 error**; `robots.txt` is empty | Search engines can't crawl systematically |
 | **P1** | Masterclass checkout shows **$0.00 order total** + shipping fields on digital course | Checkout confusion / abandoned carts |
-| **P2** | Multiple headline spacing/typo issues across funnel pages | Looks unpolished for a premium coaching brand |
+| **P1** | **Site-wide mobile responsiveness unverified** — audit used desktop snapshots; layouts may break on phone viewports | Ad traffic and quiz funnels are mobile-first; broken UX = lost leads |
+| **P2** | Spacing/typo issues on some pages (e.g. service page, NLCA order) | Looks unpolished for a premium coaching brand |
 | **P2** | Homepage HTML is **1.09 MB** | Slow mobile load = lost ad traffic |
 
 **Bottom line for re-engagement:** FASE doesn't need a rebrand. They need a **digital ops partner** who owns GHL funnel health, fixes the NLCA lead engine, puts pages under version control, and prevents regressions while their team scales client trainings.
@@ -99,6 +100,16 @@ Primary paths from `/home`. Dashed lines: alternate entries (`/page-draft`, `/fa
 
 ---
 
+## Cross-cutting — Mobile responsiveness
+
+**Suspicion (needs dedicated QA — not fully validated in this pass)**
+
+This audit captured **desktop-viewport** HTML snapshots and Playwright checks at default width. On manual re-check, there is reason to suspect the **whole site may not be mobile-responsive** — not just the NLCA funnel. GHL builder pages often ship desktop-first; combined with very large HTML (home ~1.09 MB), phone users may see overflow, cramped quiz steps, or broken nav/hero layout.
+
+**Recommend validating before ad spend:** `/home`, `/ncla-quiz-funnel`, `/ncla-result-page`, `/course-641943`, `/discovery-call` at **375px and 390px** widths (iOS/Android).
+
+---
+
 ## Content Audit — Page by Page
 
 ### `/home` — P0 + P1
@@ -133,15 +144,19 @@ Primary paths from `/home`. Dashed lines: alternate entries (`/page-draft`, `/fa
 - Tags in GHL (`nlca-audit`, `may intro`, `nlca session a/b`) show active campaign use
 
 **Issues**
-1. **Headline spacing broken**: "hasa leak" / "exactlywhere" (missing spaces)
-2. **Question counter bug**: shows "Question 11 of 5", "Question 22 of 5" (duplicate digit rendering)
-3. **Two live entry URLs** for same funnel — split attribution in ads/analytics
-4. `${gapHeadline}` template literal present in HTML source (leaks into page if JS fails)
+1. **Question counter bug**: shows "Question 11 of 5", "Question 22 of 5" (duplicate digit rendering)
+2. **Two live entry URLs** for same funnel — split attribution in ads/analytics
+3. `${gapHeadline}` template literal present in HTML source (leaks into page if JS fails)
+4. **Mobile layout suspect** — see [Cross-cutting — Mobile responsiveness](#cross-cutting--mobile-responsiveness); quiz steps and squeeze variant should be checked on phone breakpoints
+
+**Retracted (false positive on re-check)**
+- ~~Headline spacing broken ("hasa leak" / "exactlywhere")~~ — H1 is intentional line breaks in HTML (`Your consult process has<br>a leak. Find out exactly<br><em>where it is.</em>`). Plain-text extraction stripped `<br>` tags and falsely joined words; **rendered headline is correct**.
 
 **Fix now**
 - Consolidate to single canonical URL: `/ncla-quiz-funnel`
-- Fix headline text and question step counter in builder
+- Fix question step counter in builder
 - 301 redirect squeeze page variant
+- Run mobile QA on funnel + result page
 
 ---
 
@@ -354,17 +369,18 @@ fase-github-export/
 5. Consolidate 4 duplicate URL pairs (301 redirects)
 6. Fix `sitemap.xml` 500 error in GHL site settings
 7. Fix Masterclass checkout ($0 total, remove shipping)
-8. Fix quiz headline spacing + question counter ("11 of 5")
-9. Add Meta Pixel + GA4 to funnel head tracking (FASE-Service Page settings are empty)
-10. Compress `/home` page (1 MB → target under 400 KB)
+8. Fix quiz question counter ("11 of 5")
+9. **Mobile QA pass** — home, quiz, result, checkout, booking at 375px / 390px
+10. Add Meta Pixel + GA4 to funnel head tracking (FASE-Service Page settings are empty)
+11. Compress `/home` page (1 MB → target under 400 KB)
 
 ### Next (P2 — polish)
 
-11. Replace Stacy headshot placeholder on service page
-12. Add missing `<title>` on NLCA order page
-13. Fix spacing typos across NLCA and service pages
-14. Populate `robots.txt` + submit sitemap to Google Search Console
-15. Set up GitHub archive repo + monthly diff process
+12. Replace Stacy headshot placeholder on service page
+13. Add missing `<title>` on NLCA order page
+14. Fix spacing typos on service page and NLCA order page (not quiz H1 — see retraction above)
+15. Populate `robots.txt` + submit sitemap to Google Search Console
+16. Set up GitHub archive repo + monthly diff process
 
 ---
 
@@ -411,4 +427,4 @@ fase-github-export/
 
 ---
 
-*Audit conducted via live site crawl, HTML snapshot analysis, and GHL audit log export. No form submissions or payment tests were executed in this pass — recommend a live QA session for form → workflow → tag → result page chain.*
+*Audit conducted via live site crawl, HTML snapshot analysis, and GHL audit log export at **desktop viewport**. No form submissions, payment tests, or systematic mobile breakpoint QA were executed in this pass — recommend device-width testing plus a live QA session for form → workflow → tag → result page chain.*
