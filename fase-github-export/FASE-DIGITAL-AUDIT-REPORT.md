@@ -144,17 +144,16 @@ This audit captured **desktop-viewport** HTML snapshots and Playwright checks at
 - Tags in GHL (`nlca-audit`, `may intro`, `nlca session a/b`) show active campaign use
 
 **Issues**
-1. **Question counter bug**: shows "Question 11 of 5", "Question 22 of 5" (duplicate digit rendering)
-2. **Two live entry URLs** for same funnel — split attribution in ads/analytics
-3. `${gapHeadline}` template literal present in HTML source (leaks into page if JS fails)
-4. **Mobile layout suspect** — see [Cross-cutting — Mobile responsiveness](#cross-cutting--mobile-responsiveness); quiz steps and squeeze variant should be checked on phone breakpoints
+1. **Two live entry URLs** for same funnel — split attribution in ads/analytics
+2. `${gapHeadline}` template literal present in HTML source (leaks into page if JS fails)
+3. **Mobile layout suspect** — see [Cross-cutting — Mobile responsiveness](#cross-cutting--mobile-responsiveness); quiz steps and squeeze variant should be checked on phone breakpoints
 
 **Retracted (false positive on re-check)**
-- ~~Headline spacing broken ("hasa leak" / "exactlywhere")~~ — H1 is intentional line breaks in HTML (`Your consult process has<br>a leak. Find out exactly<br><em>where it is.</em>`). Plain-text extraction stripped `<br>` tags and falsely joined words; **rendered headline is correct**.
+- ~~Headline spacing broken ("hasa leak" / "exactlywhere")~~ — H1 uses intentional `<br>` line breaks (`Your consult process has<br>a leak…`). Plain-text extraction stripped breaks and joined words; **rendered headline is correct**.
+- ~~Question counter bug ("Question 11 of 5", "Question 22 of 5")~~ — Counter is two adjacent spans: `Question ${n}` + `${n} of 5` inside `.q-meta` (flex, 10px gap). Scraped `textContent` concatenates them into "Question 11 of 5"; **live Playwright check shows pill "Question 1" and progress "1 of 5"** on the active step. Not duplicate digit rendering — same extraction artifact as the headline.
 
 **Fix now**
 - Consolidate to single canonical URL: `/ncla-quiz-funnel`
-- Fix question step counter in builder
 - 301 redirect squeeze page variant
 - Run mobile QA on funnel + result page
 
@@ -369,18 +368,17 @@ fase-github-export/
 5. Consolidate 4 duplicate URL pairs (301 redirects)
 6. Fix `sitemap.xml` 500 error in GHL site settings
 7. Fix Masterclass checkout ($0 total, remove shipping)
-8. Fix quiz question counter ("11 of 5")
-9. **Mobile QA pass** — home, quiz, result, checkout, booking at 375px / 390px
-10. Add Meta Pixel + GA4 to funnel head tracking (FASE-Service Page settings are empty)
-11. Compress `/home` page (1 MB → target under 400 KB)
+8. Add Meta Pixel + GA4 to funnel head tracking (FASE-Service Page settings are empty)
+9. Compress `/home` page (1 MB → target under 400 KB)
+10. **Mobile QA pass** — home, quiz, result, checkout, booking at 375px / 390px
 
 ### Next (P2 — polish)
 
-12. Replace Stacy headshot placeholder on service page
-13. Add missing `<title>` on NLCA order page
-14. Fix spacing typos on service page and NLCA order page (not quiz H1 — see retraction above)
-15. Populate `robots.txt` + submit sitemap to Google Search Console
-16. Set up GitHub archive repo + monthly diff process
+11. Replace Stacy headshot placeholder on service page
+12. Add missing `<title>` on NLCA order page
+13. Fix spacing typos on service page and NLCA order page (quiz H1 and step counter — see retractions above)
+14. Populate `robots.txt` + submit sitemap to Google Search Console
+15. Set up GitHub archive repo + monthly diff process
 
 ---
 
