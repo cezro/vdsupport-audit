@@ -305,61 +305,39 @@ Top recurring events in audit window:
 
 ---
 
-## GitHub Transfer — How to Version-Control GHL Pages
+## Appendix: Site Archive Reference
 
-GHL has **no native export** to external platforms. The supported approach for audit + backup:
+Supporting materials produced alongside this audit. These are reference artifacts, not audit findings.
 
-### What was done
+GHL has no native export to external version control. What exists below is rendered HTML and crawl metadata suitable for backup, diffing, and reconstruction reference — not editable builder source.
 
-1. **HTML snapshot export** of all 17 live pages → `site-export/html/`
-2. **Sitemap manifest** → `site-export/audit/sitemap.json`
-3. **Automated content flag scan** → `site-export/audit/content-flags.json`
-4. **Reusable export script** → `export-to-github.ps1`
+### Artifacts
 
-### Push to GitHub (run these commands)
+| Artifact | Location | Notes |
+|----------|----------|-------|
+| HTML snapshots (17 pages) | `fase-github-export/site-export/html/` | Rendered live-page output |
+| Sitemap manifest | `site-export/audit/sitemap.json` | URL inventory from crawl |
+| Content flags | `site-export/audit/content-flags.json` | Automated template/copy scan |
+| Export script | `fase-github-export/export-to-github.ps1` | Repeatable snapshot export |
 
-```powershell
-cd C:\Users\Louie\Downloads\fase-github-export\site-export
-git init
-git add .
-git commit -m "FASE site snapshot — Jun 2026 audit baseline"
-gh repo create fase-site-archive --private --source=. --push
-```
-
-Or push to an existing repo:
-
-```powershell
-git remote add origin https://github.com/YOUR_ORG/fase-site-archive.git
-git push -u origin main
-```
-
-### Recommended repo structure
+### Layout
 
 ```
-fase-site-archive/
-├── html/                    # Rendered HTML per page (read-only archive)
-├── audit/
-│   ├── sitemap.json         # URL inventory
-│   └── content-flags.json   # Automated issue detection
-├── exports/
-│   └── audit-logs/          # Drop GHL CSV exports here
-├── export-to-github.ps1     # Re-run monthly for diff
-└── README.md
+fase-github-export/
+├── export-to-github.ps1
+└── site-export/
+    ├── html/
+    └── audit/
+        ├── sitemap.json
+        └── content-flags.json
 ```
 
-### Ongoing workflow (what you'd deliver as their partner)
+### Limitations
 
-1. **Weekly:** Re-run `export-to-github.ps1` → git diff shows exactly what changed on live site
-2. **On every funnel edit:** Export GHL audit logs CSV → commit to `exports/audit-logs/`
-3. **Before campaigns:** Run content-flags scan — catch template literals, wrong copy, zero stats
-4. **For rebuilds:** HTML archive is reference only; rebuild in GHL builder, not from HTML
-
-### Limitations (be upfront with client)
-
-- HTML export is **rendered output**, not editable GHL builder JSON
-- Forms, workflows, calendars, and payment connections **do not export**
-- For full GHL-to-GHL backup, use **Snapshots** inside GHL
-- For front-end migration packages, third-party tools like ExportGHL exist (not official)
+- HTML export is **rendered output**, not GHL builder JSON — pages cannot be re-imported as editable builder files
+- Forms, workflows, calendars, and payment connections are **not** captured in HTML
+- Full GHL-to-GHL backup relies on **Snapshots** inside GHL
+- Third-party migration tools (e.g. ExportGHL) exist but are unofficial
 
 ---
 
