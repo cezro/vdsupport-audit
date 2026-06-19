@@ -36,7 +36,7 @@ foreach ($path in $Pages) {
     $url = "$BaseUrl$path"
     $safe = ($path.Trim('/') -replace '[^a-zA-Z0-9_-]', '_')
     if (-not $safe) { $safe = 'index' }
-    $outFile = Join-Path $HtmlDir "$safe.html"
+    $outFile = Join-Path $HtmlDir "$safe.html.disabled"
     try {
         $resp = Invoke-WebRequest -Uri $url -UseBasicParsing -MaximumRedirection 5
         $html = $resp.Content
@@ -45,12 +45,12 @@ foreach ($path in $Pages) {
         $manifest += [pscustomobject]@{
             path = $path
             url = $resp.BaseResponse.ResponseUri.AbsoluteUri
-            file = "html/$safe.html"
+            file = "html/$safe.html.disabled"
             status = [int]$resp.StatusCode
             title = ($title -replace '\s+', ' ').Trim()
             size_kb = [math]::Round($html.Length / 1024, 1)
         }
-        Write-Host "OK  $path -> $safe.html"
+        Write-Host "OK  $path -> $safe.html.disabled"
     } catch {
         $manifest += [pscustomobject]@{ path = $path; url = $url; error = $_.Exception.Message }
         Write-Host "ERR $path : $($_.Exception.Message)"
